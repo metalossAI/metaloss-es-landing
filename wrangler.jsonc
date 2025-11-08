@@ -18,8 +18,9 @@
   "d1_databases": [
     {
       "binding": "D1",
-      "database_id": "d02bea30-9ad2-4306-ae42-537a873017ad",
-      "database_name": "metaloss-es-landing",
+      "database_id": "7f4f3ebc-82d6-41dc-9e88-d0a8c03b5ed5",
+      "database_name": "metaloss-es-landing-prod",
+      "remote": true
     },
   ],
   "services": [
