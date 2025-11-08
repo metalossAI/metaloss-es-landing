@@ -1,19 +1,56 @@
+import type { Metadata } from 'next'
+
 import React from 'react'
-import './styles.css'
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
-}
+import { AdminBar } from '@/components/AdminBar'
+import { Footer } from '@/Footer/Component'
+import { Navbar } from '@/components/Navbar'
+import { Providers } from '@/providers'
+import { InitTheme } from '@/providers/Theme/InitTheme'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { draftMode } from 'next/headers'
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+import './globals.css'
+import { getServerSideURL } from '@/utilities/getURL'
+import { CookieConsent } from '@/components/ui/cookies'
+import Aos from './Aos'
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { isEnabled } = await draftMode()
 
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <InitTheme />
+        <link rel="canonical" href="https://metaloss.es" />
+        <link href="/favicon.ico" rel="icon" sizes="32x32" />
+        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+      </head>
+      <body className="font-inter">
+        <Aos />
+        <Providers>
+          <AdminBar
+            adminBarProps={{
+              preview: isEnabled,
+            }}
+          />
+          <div className="flex flex-col items-center w-full">
+            <Navbar />
+            {children}
+            <Footer />
+            <CookieConsent />
+          </div>
+        </Providers>
       </body>
     </html>
   )
+}
+
+export const metadata: Metadata = {
+  metadataBase: new URL(getServerSideURL()),
+  openGraph: mergeOpenGraph(),
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@payloadcms',
+  },
 }
